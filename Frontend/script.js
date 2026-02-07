@@ -14,3 +14,9 @@ container.style.alignItems = "center";
 container.style.textAlign = "center";
 container.style.padding = "20px";
 
+// Logo / Título
+const logo = document.createElement("h1");
+logo.innerText = "Spotify";
+logo.style.fontSize = "3.5rem";
+logo.style.color = "#1DB954";
+logo.style.marginBottom = "10px";
