@@ -28,3 +28,30 @@ subtitle.style.fontSize = "1.3rem";
 subtitle.style.maxWidth = "500px";
 subtitle.style.marginBottom = "40px";
 subtitle.style.color = "#b3b3b3";
+
+const button = document.createElement("button");
+
+//
+//
+
+//
+//
+//
+
+
+
+// Rodapé simples
+const footer = document.createElement("span");
+footer.innerText = "Página demo • Projeto educacional";
+footer.style.position = "absolute";
+footer.style.bottom = "20px";
+footer.style.fontSize = "0.8rem";
+footer.style.color = "#666";
+
+// Montagem
+container.appendChild(logo);
+container.appendChild(subtitle);
+container.appendChild(button);
+
+document.body.appendChild(container);
+document.body.appendChild(footer);
