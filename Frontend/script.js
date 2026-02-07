@@ -20,3 +20,11 @@ logo.innerText = "Spotify";
 logo.style.fontSize = "3.5rem";
 logo.style.color = "#1DB954";
 logo.style.marginBottom = "10px";
+
+// Subtítulo
+const subtitle = document.createElement("p");
+subtitle.innerText = "Música para todos os momentos.";
+subtitle.style.fontSize = "1.3rem";
+subtitle.style.maxWidth = "500px";
+subtitle.style.marginBottom = "40px";
+subtitle.style.color = "#b3b3b3";
