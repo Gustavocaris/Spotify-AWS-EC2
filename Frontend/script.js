@@ -30,14 +30,19 @@ subtitle.style.marginBottom = "40px";
 subtitle.style.color = "#b3b3b3";
 
 const button = document.createElement("button");
+button.innerText = "Abrir Spotify";
+button.style.padding = "14px 36px";
+button.style.fontSize = "1rem";
+button.style.fontWeight = "bold";
+button.style.border = "none";
+button.style.borderRadius = "30px";
+button.style.cursor = "pointer";
+button.style.background = "#1DB954";
+button.style.color = "#000";
 
-//
-//
-
-//
-//
-//
-
+button.addEventListener("click", () => {
+  alert("🎶 Bem-vindo ao Spotify (demo)!");
+});
 
 
 // Rodapé simples
