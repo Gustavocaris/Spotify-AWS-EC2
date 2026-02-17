@@ -3,7 +3,10 @@ Let’s take a source code that we had already created, build an image, and depl
 
 
 1. Visão Geral (Overview)
- 
+Objetivo: 
+Arquitetura: fluxo do código -> Imagem -> Instância EC2 -> Cliente Final.
+
+
 2. Pré-requisitos
 
 3. Passo a Passo do Desenvolvimento
