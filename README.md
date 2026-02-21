@@ -14,6 +14,3 @@ Arquitetura: fluxo do código -> Imagem -> Instância EC2 -> Cliente Final.
 
 3. Passo a Passo do Desenvolvimento
 
-### Escrever
-
-4. Acesso e Teste
