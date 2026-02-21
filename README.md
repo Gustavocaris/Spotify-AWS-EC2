@@ -6,11 +6,5 @@ Let’s take a source code that we had already created, build an image, and depl
 Objetivo: 
 Arquitetura: fluxo do código -> Imagem -> Instância EC2 -> Cliente Final.
 
-### Escrever
 
-2. Pré-r
-
-### Escrever
-
-3. Passo a Passo do Desenvolvimento
 
