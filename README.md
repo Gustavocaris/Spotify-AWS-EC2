@@ -11,6 +11,10 @@ Let’s take a source code that we had already created, build an image, and depl
 
 <hr>
 
+# 🟢Imag da Arquitetura Geral(importante detalhar bem esse fluxo):
+
+*[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
+
 # 🟢Step 01: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
 
 Vamos pegar um website simples (adicionar o link do meu repo aqui e explicar que refatorei e deixei menor o codigo fonte) (HTML/CSS/JS) e deployá-lo na AWS. Mas o foco não é o site – é o processo DevOps ao redor dele. Cada fase resolve problemas da anterior, adicionando camadas de automação.
