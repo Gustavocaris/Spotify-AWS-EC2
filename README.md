@@ -11,7 +11,19 @@ Let’s take a source code that we had already created, build an image, and depl
 
 <hr>
 
-# Overview
+# Step 01:
 
+Vamos pegar um website estático simples (HTML/CSS/JS) e deployá-lo na AWS. Mas o foco não é o site – é o processo DevOps ao redor dele. Cada fase resolve problemas da anterior, adicionando camadas de automação.
+Projeto 1: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
+
+### Projeto 1: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
+- **Problema Real**: Imagine você em uma pequena equipe: O dev altera o código, mas no servidor AWS, "não funciona" por causa de dependências diferentes. Deploys envolvem SSH manual, levando a erros e tempo perdido.
+- **Solução Prática**: Use Docker para "empacotar" o site em um container portátil. Crie um ECR na AWS, push a imagem e deploy manual na EC2.
+- **Ferramentas Aprendidas**: Docker, AWS CLI, ECR, EC2, Security Groups.
+- **Conexão**: Isso resolve o "funciona na minha máquina", mas ainda é manual – preparando o terreno para automação na Fase 2.
+- **Tempo Estimado**: 2-3 horas.
+- **Desafio Inicial**: Tente deployar manualmente sem Docker e veja os erros de dependências.
+
+*[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
 
 
