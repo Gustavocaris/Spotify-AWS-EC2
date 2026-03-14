@@ -10,3 +10,5 @@ acessamos manualmente no EC2 por ssh e baixamos a imagem do ECR e rodamos o cont
 
 Aqui nosso cliente gostou da infra. Porem, ele pediu para a gente provisionar para mais clientes. Ou seja, escalar isso... de forma rapida.
 
+- Criar um bucket S3 na aws pra armazenar nosso objeto
+- armazenar nosso tfstates
