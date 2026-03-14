@@ -12,3 +12,5 @@ Aqui nosso cliente gostou da infra. Porem, ele pediu para a gente provisionar pa
 
 - Criar um bucket S3 na aws pra armazenar nosso objeto
 - armazenar nosso tfstates
+
+- geralmente usamos o main.tf, mas aqui vou deixar como ecr.tf
