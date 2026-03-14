@@ -1,0 +1,10 @@
+o dev desenvolvia a aplicação pronta. com isso ele envia pro github,
+
+nos como devops, criamos uma imagem dessa aplicação, armaZENAMOS no ECR.
+
+acessamos manualmente no EC2 por ssh e baixamos a imagem do ECR e rodamos o container.
+
+-> provisionamos uma ECR, uma role do IAM e uma instancia EC2 (isso a gente fez na aws manualemente)
+
+Aqui nosso cliente gostou da infra. Porem, ele pediu para a gente provisionar para mais clientes. Ou seja, escalar isso... de forma rapida.
+
