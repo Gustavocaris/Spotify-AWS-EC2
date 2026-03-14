@@ -1,5 +1,7 @@
 o dev desenvolvia a aplicação pronta. com isso ele envia pro github,
 
+a aplicação pronta que pegamos foi esse projeto do spotify (que ja está em um repo nosso)
+
 nos como devops, criamos uma imagem dessa aplicação, armaZENAMOS no ECR.
 
 acessamos manualmente no EC2 por ssh e baixamos a imagem do ECR e rodamos o container.
