@@ -8,6 +8,15 @@ resource "aws_instance" "website_server" {
   tags = {
     Name        = "website-server"
     Provisioned = "Terraform"
-    Cliente     = "Maria"
+    Cliente     = "GuGu"
   }
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+  security_group_id = aws_security_group.website_sg.id
+  cidr_ipv4         = "seu-ip/32"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
 }
