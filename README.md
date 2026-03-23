@@ -25,6 +25,8 @@ Este repositório contém 3 pastas, cada uma com um projeto independente, mas in
 
 <hr>
 
+## ⚠️Steps 1/3
+
 ##  Step 01: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
 
 Vamos pegar um website simples (adicionar o link do meu repo aqui e explicar que refatorei e deixei menor o codigo fonte) (HTML/CSS/JS) e deployá-lo na AWS. Mas o foco não é o site – é o processo DevOps ao redor dele. Cada fase resolve problemas da anterior, adicionando camadas de automação.
