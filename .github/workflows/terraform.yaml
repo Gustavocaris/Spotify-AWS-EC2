@@ -1,0 +1,8 @@
+name: infra-as-code
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
