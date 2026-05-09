@@ -1,42 +1,40 @@
 <h1 align="center">
   Spotify-AWS-EC2
 </h1>
-Let’s take a source code that we had already created, build an image, and deploy it to an EC2 instance on Amazon so the end customer can use it
 <p align="center">
-
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-%2304D361">
   <img alt="Version: 1.0" src="https://img.shields.io/badge/version-1.0-yellowgreen">
-
 </p>
 
-<hr>
+# 📖 Contexto do Projeto
 
-## 1 - Introduction
-Este repositório contém 3 pastas, cada uma com um projeto independente, mas interligado:
-- **projeto-devops-fase-1**: O básico – containerize e deploy manual de um site estático na AWS.
-- **projeto-devops-fase-2**: Adicione automação de infraestrutura com Terraform (IaC).
-- **projeto-devops-fase-3**: Full automation com CI/CD usando GitHub Actions + Terraform + Docker.
+Este projeto foi desenvolvido para simular a evolução real de um ambiente moderno de desenvolvimento e deploy em cloud. Em muitos cenários, principalmente em pequenas equipes ou startups, é comum enfrentar problemas onde a aplicação funciona localmente, mas apresenta falhas ao ser publicada em servidores na AWS devido a diferenças de dependências, configurações e ambientes. Além disso, deploys realizados manualmente via SSH acabam consumindo tempo, aumentando riscos de erros humanos e dificultando a padronização do processo.
 
-<hr>
+Para resolver esse problema inicial, a primeira etapa do laboratório utiliza Docker para containerizar a aplicação web, garantindo portabilidade e consistência entre ambientes. A imagem Docker é enviada para o Amazon ECR e posteriormente implantada manualmente em uma instância EC2 na AWS.
 
-## 2 - Imag da Arquitetura Geral(importante detalhar bem esse fluxo):
+Com o crescimento da aplicação e da infraestrutura, surge um novo desafio: recriar ambientes rapidamente sem depender de configurações manuais no console da AWS. Esse processo frequentemente gera inconsistências entre ambientes, alterações não rastreadas e falhas operacionais. Para solucionar esse cenário, o projeto evolui para Infraestrutura como Código utilizando Terraform, permitindo provisionar recursos como EC2, ECR, IAM Roles e Security Groups de forma automatizada, padronizada e reproduzível através de arquivos HCL.
+
+Na sequência, o laboratório aborda problemas comuns em ambientes com múltiplos desenvolvedores e mudanças frequentes no código. Deploys manuais passam a gerar gargalos, falta de auditabilidade e riscos de downtime. Para isso, são implementadas pipelines CI/CD utilizando GitHub Actions, automatizando processos de build, push de imagens Docker, execução de planos Terraform e deploys automatizados com maior controle e segurança operacional.
+
+Por fim, a última etapa implementa uma pipeline completa de integração e entrega contínua seguindo boas práticas de DevSecOps. O projeto utiliza GitHub Actions para automatizar o build da aplicação, o envio da imagem para o Amazon ECR e o deploy automatizado na EC2 sempre que houver alterações na branch `main`. Além da automação, são aplicadas práticas modernas de segurança, como autenticação via OIDC, uso de credenciais temporárias e gerenciamento seguro de segredos, garantindo um fluxo mais seguro, auditável e eficiente.
 
 *[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
 
+
+
 <hr>
 
-## ⚠️Steps 1/3
+# 🚀 Start 
 
-##  Step 01: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
+## ⚠️ Step 01: Containerização com Docker e Deploy Manual na AWS
 
-Vamos pegar um website simples (adicionar o link do meu repo aqui e explicar que refatorei e deixei menor o codigo fonte) (HTML/CSS/JS) e deployá-lo na AWS. Mas o foco não é o site – é o processo DevOps ao redor dele. Cada fase resolve problemas da anterior, adicionando camadas de automação.
+A aplicação já chega pronta para o processo de deploy. Para este laboratório, foi utilizado como base um projeto refatorado de outro repositório meu ([link]), que foi adaptado e simplificado para uma versão mais leve, utilizando HTML, CSS e JavaScript puro. O foco do projeto não está no desenvolvimento da aplicação em si, mas sim em toda a jornada de containerização, provisionamento de infraestrutura e automação de deploy na AWS.
 
 ### Projeto 1: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
 - **Problema Real**: Imagine você em uma pequena equipe: O dev altera o código, mas no servidor AWS, "não funciona" por causa de dependências diferentes. Deploys envolvem SSH manual, levando a erros e tempo perdido.
 - **Solução Prática**: Use Docker para "empacotar" o site em um container portátil. Crie um ECR na AWS, push a imagem e deploy manual na EC2.
 - **Ferramentas Aprendidas**: Docker, AWS CLI, ECR, EC2, Security Groups.
 - **Conexão**: Isso resolve o "funciona na minha máquina", mas ainda é manual – preparando o terreno para automação na Fase 2.
-- **Tempo Estimado**: 2-3 horas.
 - **Desafio Inicial**: Tente deployar manualmente sem Docker e veja os erros de dependências.
 
 *[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
