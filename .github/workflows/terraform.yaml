@@ -1,4 +1,4 @@
-name: Automacao Terraform
+name: Terraform Automation
 
 
 on:
@@ -8,4 +8,19 @@ on:
         description: 'Deseja aplicar as mudanças?'
         required: true
         default: 'false'
-        type: boolean
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+
+jobs:
+  job1:
+    name: Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v6.0.2
+
+      - name: "Configure AWS Credentials" Action for GitHub Actions
+      - uses: aws-actions/configure-aws-credentials@v6.1.1
