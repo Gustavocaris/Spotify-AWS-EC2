@@ -24,13 +24,11 @@ Por fim, a última etapa implementa uma pipeline completa de integração e entr
 
 <hr>
 
-# 🚀 Start 
-
-## ⚠️ Step 01: Containerização com Docker e Deploy Manual na AWS
+# 🚀 Start - Hands on
 
 A aplicação já chega pronta para o processo de deploy. Para este laboratório, foi utilizado como base um projeto refatorado de outro repositório meu ([link]), que foi adaptado e simplificado para uma versão mais leve, utilizando HTML, CSS e JavaScript puro. O foco do projeto não está no desenvolvimento da aplicação em si, mas sim em toda a jornada de containerização, provisionamento de infraestrutura e automação de deploy na AWS.
 
-### Projeto 1: Containerização com Docker e Deploy Manual na AWS (Nível Básico)
+### Step 1: Containerização com Docker e Deploy Manual na AWS
 - **Problema Real**: Imagine você em uma pequena equipe: O dev altera o código, mas no servidor AWS, "não funciona" por causa de dependências diferentes. Deploys envolvem SSH manual, levando a erros e tempo perdido.
 - **Solução Prática**: Use Docker para "empacotar" o site em um container portátil. Crie um ECR na AWS, push a imagem e deploy manual na EC2.
 - **Ferramentas Aprendidas**: Docker, AWS CLI, ECR, EC2, Security Groups.
@@ -40,22 +38,20 @@ A aplicação já chega pronta para o processo de deploy. Para este laboratório
 *[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
 
 
-### Projeto 2: Automatização de Infraestrutura com Terraform (IaC) (Nível Intermediário)
+### Step 2: Automatização de Infraestrutura com Terraform (IaC) (Nível Intermediário)
 - **Problema Real**: Agora a startup cresce: Você precisa recriar ambientes (dev/staging/prod) rapidamente, mas cliques manuais no console AWS causam inconsistências, erros e "drift" (mudanças não rastreadas). Um deploy de emergência falha porque uma configuração foi esquecida.
 - **Solução Prática**: Trate a infra como código com Terraform. Declare recursos como EC2, ECR e IAM Roles em arquivos HCL, e o Terraform provisiona tudo automaticamente.
 - **Ferramentas Aprendidas**: Terraform (init/plan/apply/destroy), backends remotos (S3 para state), outputs para integração.
 - **Conexão**: Integra com o Docker do Projeto 1 – agora a infra é reproduzível, mas o deploy ainda requer SSH manual. Isso motiva a full automation na Fase 3.
-- **Tempo Estimado**: 2-4 horas.
 - **Desafio Inicial**: Tente recriar manualmente o ambiente do Projeto 1 em uma nova região e note os pontos de dor.
 
 *[Espaço para print: Diagrama da arquitetura do Projeto 2, mostrando arquivos Terraform → AWS Infra (EC2/ECR) → Deploy Docker]*
 
-### Projeto 3: Automatização Completa com CI/CD (GitHub Actions + Terraform + Docker) (Nível Avançado)
+### Step 3: Automatização Completa com CI/CD (GitHub Actions + Terraform + Docker) (Nível Avançado)
 - **Problema Real**: Com múltiplos devs, changes diárias viram caos: Deploys manuais criam gargalos, erros humanos e falta de auditabilidade. Um pico de tráfego exige update rápido, mas conflitos no Terraform state causam downtime.
 - **Solução Prática**: Separe repos (app e infra), use GitHub Actions para pipelines CI/CD. Push no código dispara builds Docker, plans Terraform e deploys com aprovações manuais para segurança.
 - **Ferramentas Aprendidas**: GitHub Actions (workflows YAML, secrets, aprovações), integração multi-repo.
 - **Conexão**: Une tudo: Docker do Projeto 1 + Terraform do Projeto 2 em um fluxo automatizado. Agora, é um pipeline DevOps real, escalável para equipes.
-- **Tempo Estimado**: 3-5 horas.
 - **Desafio Inicial**: Simule deploys simultâneos manuais no setup do Projeto 2 e veja conflitos.
 
 *[Espaço para print: Diagrama completo da arquitetura do Projeto 3, mostrando Repos GitHub → Actions CI/CD → AWS Infra + Deploy]*
