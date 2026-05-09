@@ -1,8 +1,11 @@
-name: infra-as-code
+name: Automacao Terraform
+
+
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Deseja aplicar as mudanças?'
+        required: true
+        default: 'false'
+        type: boolean
