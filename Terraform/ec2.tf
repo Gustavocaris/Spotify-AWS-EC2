@@ -15,7 +15,7 @@ resource "aws_instance" "website_server" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.website_sg.id
-  cidr_ipv4         = "201.21.160.22/32"
+  cidr_ipv4         = "my-ip/32"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
