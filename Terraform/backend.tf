@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-lab-gustavo"
+    bucket = "gustavocaris-sa-east-1-terraform-statefile"
     key = "site/terraform.tfstate"
-    region = "us-east-2"
+    region = "sa-east-1"
     encrypt = true
   }
 }
