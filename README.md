@@ -6,72 +6,356 @@
   <img alt="Version: 1.0" src="https://img.shields.io/badge/version-1.0-yellowgreen">
 </p>
 
-# 📖 Contexto do Projeto
+> Projeto de laboratório que simula a evolução real de um ambiente moderno de desenvolvimento e deploy em cloud, utilizando Docker, Terraform e GitHub Actions para automatizar o ciclo completo de entrega de uma aplicação frontend inspirada no Spotify.
 
-Este projeto foi desenvolvido para simular a evolução real de um ambiente moderno de desenvolvimento e deploy em cloud. Em muitos cenários, principalmente em pequenas equipes ou startups, é comum enfrentar problemas onde a aplicação funciona localmente, mas apresenta falhas ao ser publicada em servidores na AWS devido a diferenças de dependências, configurações e ambientes. Além disso, deploys realizados manualmente via SSH acabam consumindo tempo, aumentando riscos de erros humanos e dificultando a padronização do processo.
+---
 
-Para resolver esse problema inicial, a primeira etapa do laboratório utiliza Docker para containerizar a aplicação web, garantindo portabilidade e consistência entre ambientes. A imagem Docker é enviada para o Amazon ECR e posteriormente implantada manualmente em uma instância EC2 na AWS.
+## 📋 Índice
 
-Com o crescimento da aplicação e da infraestrutura, surge um novo desafio: recriar ambientes rapidamente sem depender de configurações manuais no console da AWS. Esse processo frequentemente gera inconsistências entre ambientes, alterações não rastreadas e falhas operacionais. Para solucionar esse cenário, o projeto evolui para Infraestrutura como Código utilizando Terraform, permitindo provisionar recursos como EC2, ECR, IAM Roles e Security Groups de forma automatizada, padronizada e reproduzível através de arquivos HCL.
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Arquitetura](#arquitetura)
+- [Estrutura do Repositório](#estrutura-do-repositório)
+- [Etapas do Laboratório](#etapas-do-laboratório)
+  - [Step 1 — Containerização com Docker](#step-1--containerização-com-docker)
+  - [Step 2 — Infraestrutura como Código com Terraform](#step-2--infraestrutura-como-código-com-terraform)
+  - [Step 3 — CI/CD com GitHub Actions](#step-3--cicd-com-github-actions)
+- [IAM Roles e Segurança](#iam-roles-e-segurança)
+- [Pipelines CI/CD](#pipelines-cicd)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Pré-requisitos](#pré-requisitos)
 
-Na sequência, o laboratório aborda problemas comuns em ambientes com múltiplos desenvolvedores e mudanças frequentes no código. Deploys manuais passam a gerar gargalos, falta de auditabilidade e riscos de downtime. Para isso, são implementadas pipelines CI/CD utilizando GitHub Actions, automatizando processos de build, push de imagens Docker, execução de planos Terraform e deploys automatizados com maior controle e segurança operacional.
+---
 
-Por fim, a última etapa implementa uma pipeline completa de integração e entrega contínua seguindo boas práticas de DevSecOps. O projeto utiliza GitHub Actions para automatizar o build da aplicação, o envio da imagem para o Amazon ECR e o deploy automatizado na EC2 sempre que houver alterações na branch `main`. Além da automação, são aplicadas práticas modernas de segurança, como autenticação via OIDC, uso de credenciais temporárias e gerenciamento seguro de segredos, garantindo um fluxo mais seguro, auditável e eficiente.
+## Sobre o Projeto
 
-*[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
+Este projeto foi desenvolvido para simular a evolução real de um ambiente moderno de desenvolvimento e deploy em cloud. A aplicação consiste em uma **página frontend inspirada no Spotify**, servida via Nginx dentro de um container Docker e publicada na AWS.
 
+O laboratório aborda de forma progressiva os principais desafios enfrentados por equipes de desenvolvimento:
 
+| Problema Real | Solução Aplicada |
+|---|---|
+| "Funciona na minha máquina" | Docker — containerização da aplicação |
+| Infraestrutura manual e inconsistente | Terraform — Infraestrutura como Código |
+| Deploy manual, lento e propenso a erros | GitHub Actions — pipeline CI/CD automatizada |
+| Credenciais expostas, sem auditoria | OIDC + IAM Roles com credenciais temporárias |
 
-<hr>
+---
 
-# 🚀 Start - Hands on
+## Arquitetura
 
-A aplicação já chega pronta para o processo de deploy. Para este laboratório, foi utilizado como base um projeto refatorado de outro repositório meu ([link]), que foi adaptado e simplificado para uma versão mais leve, utilizando HTML, CSS e JavaScript puro. O foco do projeto não está no desenvolvimento da aplicação em si, mas sim em toda a jornada de containerização, provisionamento de infraestrutura e automação de deploy na AWS.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        GitHub Repository                        │
+│                                                                 │
+│  ┌──────────────┐    Push to main    ┌──────────────────────┐   │
+│  │  Developer   │ ────────────────►  │   GitHub Actions     │   │
+│  └──────────────┘                    │  (CI/CD Pipeline)    │   │
+│                                      └──────────┬───────────┘   │
+└─────────────────────────────────────────────────┼───────────────┘
+                                                  │ OIDC Token
+                                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                          AWS Cloud                              │
+│                                                                 │
+│  ┌──────────────────┐         ┌─────────────────────────────┐   │
+│  │    IAM Role      │ ◄───────│   Assume Role via OIDC      │   │
+│  │ github-infra-role│         │  (sem credenciais estáticas)│   │
+│  └────────┬─────────┘         └─────────────────────────────┘   │
+│           │                                                     │
+│           │ Permissões                                          │
+│           ▼                                                     │
+│  ┌──────────────────┐    Push   ┌──────────────────────────┐    │
+│  │   Amazon ECR     │ ◄──────── │     Docker Build         │    │
+│  │  (Image Registry)│           │  (Nginx + Frontend)      │    │
+│  └────────┬─────────┘           └──────────────────────────┘    │
+│           │                                                     │
+│           │ docker pull                                         │
+│           ▼                                                     │
+│  ┌──────────────────┐           ┌──────────────────────────┐    │
+│  │    Amazon EC2    │           │       Amazon S3          │    │
+│  │  (Nginx/Docker)  │           │   (Terraform tfstate)    │    │
+│  │                  │           └──────────────────────────┘    │
+│  │  Port 80 (HTTP)  │                                           │
+│  └──────────────────┘                                           │
+│                                                                 │
+│         Provisionado via Terraform (IaC)                        │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-### ✅ Step 1: Containerização com Docker e Deploy Manual na AWS
-- **Problema Real**: Imagine você em uma pequena equipe: O dev altera o código, mas no servidor AWS, "não funciona" por causa de dependências diferentes. Deploys envolvem SSH manual, levando a erros e tempo perdido.
-- **Solução Prática**: Use Docker para "empacotar" o site em um container portátil. Crie um ECR na AWS, push a imagem e deploy manual na EC2.
-- **Ferramentas Aprendidas**: Docker, AWS CLI, ECR, EC2, Security Groups.
-- **Conexão**: Isso resolve o "funciona na minha máquina", mas ainda é manual – preparando o terreno para automação na Fase 2.
-- **Desafio Inicial**: Tente deployar manualmente sem Docker e veja os erros de dependências.
+**Fluxo resumido:**
+1. O desenvolvedor realiza um push na branch `main`
+2. O GitHub Actions dispara a pipeline automaticamente
+3. A pipeline se autentica na AWS via OIDC (sem credenciais estáticas)
+4. O Terraform provisiona ou atualiza a infraestrutura (EC2, ECR, IAM, Security Groups)
+5. A imagem Docker é construída e enviada ao Amazon ECR
+6. A EC2 realiza o pull da nova imagem e reinicia o container
+
+---
+
+## Estrutura do Repositório
+
+```
+SPOTIFY-AWS-EC2/
+├── .github/
+│   └── workflows/
+│       ├── terraform.yaml          # Pipeline principal (infra + deploy)
+│       └── terraform-destroy.yaml  # Pipeline para destruir a infraestrutura
+│
+├── Docker/
+│   └── Dockerfile                  # Definição da imagem Nginx + Frontend
+│
+├── Frontend/
+│   ├── src/                        # Assets e recursos estáticos
+│   ├── index.html                  # Página principal (UI inspirada no Spotify)
+│   └── script.js                   # Lógica frontend
+│
+├── Terraform/
+│   ├── .terraform/                 # Cache local de providers (não versionado)
+│   ├── backend.tf                  # Configuração do estado remoto (S3)
+│   ├── provider.tf                 # Configuração do provider AWS
+│   ├── ec2.tf                      # Recurso: instância EC2
+│   ├── ecr.tf                      # Recurso: repositório Amazon ECR
+│   ├── iam.tf                      # Recurso: IAM Roles e Policies
+│   └── .terraform.lock.hcl        # Lock de versões dos providers
+│
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+---
+
+## Etapas do Laboratório
+
+### Step 1 — Containerização com Docker
+
+O primeiro desafio resolvido é o clássico problema de inconsistência entre ambientes. A aplicação é containerizada com Docker, garantindo que o comportamento seja idêntico em qualquer máquina ou servidor.
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/0ecc5fab-3ac5-4857-bdd3-1468111ea402" />
 </div>
 
+**Dockerfile:**
 
-### ✅ Step 2: Automatização de Infraestrutura com Terraform (IaC) (Nível Intermediário)
-- **Problema Real**: Agora a startup cresce: Você precisa recriar ambientes (dev/staging/prod) rapidamente, mas cliques manuais no console AWS causam inconsistências, erros e "drift" (mudanças não rastreadas). Um deploy de emergência falha porque uma configuração foi esquecida.
-- **Solução Prática**: Trate a infra como código com Terraform. Declare recursos como EC2, ECR e IAM Roles em arquivos HCL, e o Terraform provisiona tudo automaticamente.
-- **Ferramentas Aprendidas**: Terraform (init/plan/apply/destroy), backends remotos (S3 para state), outputs para integração.
-- **Conexão**: Integra com o Docker do Projeto 1 – agora a infra é reproduzível, mas o deploy ainda requer SSH manual. Isso motiva a full automation na Fase 3.
-- **Desafio Inicial**: Tente recriar manualmente o ambiente do Projeto 1 em uma nova região e note os pontos de dor.
+```dockerfile
+FROM nginx:alpine
+
+COPY Frontend/ /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+**Decisões técnicas:**
+
+- `nginx:alpine` — imagem minimalista (~5MB), menor superfície de ataque e inicialização mais rápida
+- `COPY Frontend/` — copia todos os arquivos estáticos diretamente para o diretório padrão do Nginx
+- `daemon off` — mantém o processo Nginx em foreground, necessário para o container permanecer ativo
+
+A imagem gerada é publicada no **Amazon ECR** e a primeira implantação é feita manualmente via SSH em uma instância EC2.
+
+---
+
+### Step 2 — Infraestrutura como Código com Terraform
+
+Com o crescimento da infraestrutura, configurações manuais no console AWS se tornam insustentáveis. O Terraform resolve isso definindo toda a infraestrutura em arquivos HCL versionados.
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/332d2ffc-0d75-4424-a666-d21d9e17e08c" />
 </div>
 
-### Step 3: Automatização Completa com CI/CD (GitHub Actions + Terraform + Docker) (Nível Avançado)
-- **Problema Real**: Com múltiplos devs, changes diárias viram caos: Deploys manuais criam gargalos, erros humanos e falta de auditabilidade. Um pico de tráfego exige update rápido, mas conflitos no Terraform state causam downtime.
-- **Solução Prática**: Separe repos (app e infra), use GitHub Actions para pipelines CI/CD. Push no código dispara builds Docker, plans Terraform e deploys com aprovações manuais para segurança.
-- **Ferramentas Aprendidas**: GitHub Actions (workflows YAML, secrets, aprovações), integração multi-repo.
-- **Conexão**: Une tudo: Docker do Projeto 1 + Terraform do Projeto 2 em um fluxo automatizado. Agora, é um pipeline DevOps real, escalável para equipes.
-- **Desafio Inicial**: Simule deploys simultâneos manuais no setup do Projeto 2 e veja conflitos.
+**Recursos provisionados:**
 
-*[Espaço para print: Diagrama completo da arquitetura do Projeto 3, mostrando Repos GitHub → Actions CI/CD → AWS Infra + Deploy]*
+| Arquivo | Recurso AWS | Finalidade |
+|---|---|---|
+| `ec2.tf` | Amazon EC2 | Instância que hospeda o container Docker |
+| `ecr.tf` | Amazon ECR | Registry privado para as imagens Docker |
+| `iam.tf` | IAM Role + Policies | Controle de permissões e autenticação OIDC |
+| `backend.tf` | Amazon S3 | Armazenamento remoto do `terraform.tfstate` |
+| `provider.tf` | AWS Provider | Configuração da região e autenticação |
 
-### 🔧 Como Começar
-1. **Clone o Repositório**:
-   ```bash
-   git clone https://github.com/marialazara/devops-projects.git
-   cd seu-repo-devops
-   ```
-2. **Escolha uma Fase**: Comece pela pasta `projeto-devops-fase-1` e avance. Cada README tem pré-requisitos, passos e troubleshooting.
-3. **Ambiente**: Certifique-se de ter uma conta AWS gratuita (cuidado com custos – use Free Tier). Instale ferramentas como Docker, Terraform e AWS CLI conforme descrito.
-4. **Dicas Gerais**:
-   - Use VS Code para editar arquivos.
-   - Sempre teste localmente antes de apply/destroy.
-   - Limpe recursos AWS no final para evitar custos!
-5. **Personalize**: Substitua placeholders (ex.: regiões AWS, nomes de repos) com os seus.
+**Por que o estado remoto no S3 é crítico:**
+
+Sem o `backend.tf` apontando para um bucket S3, o `terraform.tfstate` ficaria apenas na máquina local. Em um time, dois membros executando `terraform apply` simultaneamente poderiam corromper o estado da infraestrutura. O S3 com state locking via DynamoDB resolve esse problema, tornando o Terraform seguro para uso colaborativo.
+
+---
+
+### Step 3 — CI/CD com GitHub Actions
+
+A etapa final automatiza completamente o ciclo de build, infraestrutura e deploy, eliminando intervenção manual e adicionando auditabilidade a cada alteração.
+
+**Pipeline de Infraestrutura (`terraform.yaml`):**
+
+```
+Push na main
+     │
+     ▼
+Checkout do código
+     │
+     ▼
+Autenticação AWS via OIDC (sem senhas estáticas)
+     │
+     ▼
+terraform init → validate → plan → apply*
+     │
+     ▼
+Docker build → push para ECR
+     │
+     ▼
+Deploy na EC2 (docker pull + run)
+
+* apply só executa se apply == 'true' (proteção contra destruição acidental)
+```
+
+---
+
+## IAM Roles e Segurança
+
+Este é um dos aspectos mais importantes do projeto do ponto de vista de **DevSecOps**.
+
+### O problema das credenciais estáticas
+
+A abordagem tradicional de CI/CD armazena `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY` como secrets no GitHub. Isso apresenta riscos sérios:
+
+- Credenciais de longa duração — se vazarem, o acesso persiste até revogação manual
+- Difícil auditoria — não há distinção clara de qual pipeline executou cada ação
+- Rotação complexa — requer atualização manual em todos os repositórios
+
+### A solução: OIDC + IAM Role com credenciais temporárias
+
+O projeto utiliza **OpenID Connect (OIDC)** para autenticação federada entre o GitHub Actions e a AWS, eliminando completamente o uso de credenciais estáticas.
+
+**Como funciona:**
+
+```
+GitHub Actions                    AWS
+     │                              │
+     │  1. Solicita OIDC Token      │
+     │ ─────────────────────────►  │
+     │                              │
+     │  2. Token JWT temporário     │
+     │ ◄─────────────────────────  │
+     │                              │
+     │  3. AssumeRoleWithWebIdentity│
+     │     (apresenta o JWT)        │
+     │ ─────────────────────────►  │
+     │                              │
+     │  4. Credenciais temporárias  │
+     │     (válidas por ~1 hora)    │
+     │ ◄─────────────────────────  │
+     │                              │
+     │  5. Executa ações na AWS     │
+     │     com as credenciais temp. │
+     │ ─────────────────────────►  │
+```
+
+**No workflow:**
+
+```yaml
+- name: "Configure AWS Credentials"
+  uses: aws-actions/configure-aws-credentials@v4
+  with:
+    role-to-assume: arn:aws:iam::ACCOUNT_ID:role/github-infra-role
+    aws-region: sa-east-1
+```
+
+### Estrutura da IAM Role (`iam.tf`)
+
+A role `github-infra-role` é composta por três elementos:
+
+**1. Trust Policy (Política de Confiança)**
+
+Define *quem* pode assumir a role. Neste caso, apenas o GitHub Actions do repositório correto:
+
+```json
+{
+  "Effect": "Allow",
+  "Principal": {
+    "Federated": "arn:aws:iam::ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+  },
+  "Action": "sts:AssumeRoleWithWebIdentity",
+  "Condition": {
+    "StringLike": {
+      "token.actions.githubusercontent.com:sub": "repo:SEU_USUARIO/SPOTIFY-AWS-EC2:*"
+    }
+  }
+}
+```
+
+**2. Permission Policy (Política de Permissões)**
+
+Define *o que* a role pode fazer na AWS. Inclui permissões mínimas necessárias para:
+
+- Criar e gerenciar instâncias EC2 e Security Groups
+- Autenticar e publicar imagens no Amazon ECR
+- Ler e escrever o estado do Terraform no S3
+- Criar e atualizar IAM Roles (para o próprio provisionamento)
+
+**3. Princípio do menor privilégio**
+
+A role possui apenas as permissões estritamente necessárias para executar as pipelines. Nenhum acesso desnecessário é concedido, reduzindo a superfície de ataque em caso de comprometimento.
+
+### Benefícios dessa abordagem
+
+| Aspecto | Credenciais Estáticas | OIDC + IAM Role |
+|---|---|---|
+| Duração | Permanente até revogação | ~1 hora (temporária) |
+| Risco de vazamento | Alto | Muito baixo |
+| Auditoria no CloudTrail | Genérica | Identifica a pipeline exata |
+| Rotação | Manual | Automática |
+| Escopo | Irrestrito (usuário IAM) | Mínimo necessário (role) |
+
+---
+
+## Pipelines CI/CD
+
+### `terraform.yaml` — Pipeline Principal
+
+Disparada em push na branch `main`. Executa:
+
+1. Autenticação OIDC na AWS
+2. Inicialização e validação do Terraform
+3. `terraform plan` — prévia das mudanças
+4. `terraform apply` — execução condicional (requer `apply: true` no input manual)
+5. Build e push da imagem Docker para o ECR
+6. Deploy do container na instância EC2
+
+### `terraform-destroy.yaml` — Pipeline de Destruição
+
+Pipeline auxiliar acionada manualmente para destruir toda a infraestrutura provisionada com `terraform destroy`. Útil para gerenciamento de custos em ambientes de laboratório.
+
+---
+
+## Tecnologias Utilizadas
+
+- **Docker** — containerização da aplicação
+- **Nginx (Alpine)** — servidor web leve para arquivos estáticos
+- **Amazon ECR** — registry privado de imagens Docker
+- **Amazon EC2** — instância de computação na AWS
+- **Amazon S3** — armazenamento do Terraform state
+- **Terraform** — provisionamento de infraestrutura como código
+- **GitHub Actions** — automação de CI/CD
+- **AWS IAM + OIDC** — autenticação segura sem credenciais estáticas
+
+---
+
+## Pré-requisitos
+
+Para reproduzir este projeto, você precisará de:
+
+- Conta AWS com permissões administrativas
+- GitHub Actions habilitado no repositório
+- AWS CLI configurada localmente
+- Terraform >= 1.0 instalado
+- Docker instalado e em execução
+- Bucket S3 criado previamente para o Terraform backend
+
+---
+
+> Desenvolvido como projeto de laboratório DevOps — explorando containerização, IaC e CI/CD com boas práticas de segurança em cloud.
 
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/332d2ffc-0d75-4424-a666-d21d9e17e08c" />
+</div>
