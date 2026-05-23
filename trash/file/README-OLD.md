@@ -1,11 +1,3 @@
-<h1 align="center">
-  Spotify-AWS-EC2
-</h1>
-<p align="center">
-  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-%2304D361">
-  <img alt="Version: 1.0" src="https://img.shields.io/badge/version-1.0-yellowgreen">
-</p>
-
 # 📖 Contexto do Projeto
 
 Este projeto foi desenvolvido para simular a evolução real de um ambiente moderno de desenvolvimento e deploy em cloud. Em muitos cenários, principalmente em pequenas equipes ou startups, é comum enfrentar problemas onde a aplicação funciona localmente, mas apresenta falhas ao ser publicada em servidores na AWS devido a diferenças de dependências, configurações e ambientes. Além disso, deploys realizados manualmente via SSH acabam consumindo tempo, aumentando riscos de erros humanos e dificultando a padronização do processo.
@@ -20,8 +12,6 @@ Por fim, a última etapa implementa uma pipeline completa de integração e entr
 
 *[Espaço para print: Diagrama simples da arquitetura do Projeto 1, mostrando código local → Docker → ECR → EC2 → Browser]*
 
-
-
 <hr>
 
 # 🚀 Start - Hands on
@@ -35,10 +25,6 @@ A aplicação já chega pronta para o processo de deploy. Para este laboratório
 - **Conexão**: Isso resolve o "funciona na minha máquina", mas ainda é manual – preparando o terreno para automação na Fase 2.
 - **Desafio Inicial**: Tente deployar manualmente sem Docker e veja os erros de dependências.
 
-<div align="center">
-<img src="https://github.com/user-attachments/assets/0ecc5fab-3ac5-4857-bdd3-1468111ea402" />
-</div>
-
 
 ### ✅ Step 2: Automatização de Infraestrutura com Terraform (IaC) (Nível Intermediário)
 - **Problema Real**: Agora a startup cresce: Você precisa recriar ambientes (dev/staging/prod) rapidamente, mas cliques manuais no console AWS causam inconsistências, erros e "drift" (mudanças não rastreadas). Um deploy de emergência falha porque uma configuração foi esquecida.
@@ -47,9 +33,6 @@ A aplicação já chega pronta para o processo de deploy. Para este laboratório
 - **Conexão**: Integra com o Docker do Projeto 1 – agora a infra é reproduzível, mas o deploy ainda requer SSH manual. Isso motiva a full automation na Fase 3.
 - **Desafio Inicial**: Tente recriar manualmente o ambiente do Projeto 1 em uma nova região e note os pontos de dor.
 
-<div align="center">
-<img src="https://github.com/user-attachments/assets/332d2ffc-0d75-4424-a666-d21d9e17e08c" />
-</div>
 
 ### Step 3: Automatização Completa com CI/CD (GitHub Actions + Terraform + Docker) (Nível Avançado)
 - **Problema Real**: Com múltiplos devs, changes diárias viram caos: Deploys manuais criam gargalos, erros humanos e falta de auditabilidade. Um pico de tráfego exige update rápido, mas conflitos no Terraform state causam downtime.
