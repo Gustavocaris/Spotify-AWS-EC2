@@ -356,6 +356,49 @@ Para reproduzir este projeto, você precisará de:
 > Desenvolvido como projeto de laboratório DevOps — explorando containerização, IaC e CI/CD com boas práticas de segurança em cloud.
 
 
+
+### `terraform init`
 <div align="center">
-<img src="https://github.com/user-attachments/assets/332d2ffc-0d75-4424-a666-d21d9e17e08c" />
+<img src="https://github.com/user-attachments/assets/dcd43fc0-a9bf-4c65-8c55-bb05630ecebb" />
+</div>
+
+### `terraform validate` Tive algumas correcoes
+<div align="center">
+<img src="https://github.com/user-attachments/assets/89bd21b1-07b8-4216-b032-6faf2ff1e827" />
+</div>
+
+### `terraform plan`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/adfb4630-dfd5-4b79-ad78-102bc22ccd24" />
+</div>
+
+### `terraform apply` realizamos algumas correcoes também.
+<div align="center">
+<img src="https://github.com/user-attachments/assets/dddbd500-e9eb-46b6-a219-750c27e024b3" />
+</div>
+
+### `terraform apply`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/7d1e2efd-389d-45a7-9eac-da806f1a5279" />
+</div>
+
+### `instance status completed`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/6036d0ef-0fda-4b78-82ab-74d61a6af892" />
+</div>
+
+### `secutity groups`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/9aeb612f-ac84-44e5-a6e6-bc40b04297f5" />
+</div>
+
+### `terraform automation`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/e4ddc4e3-2fc4-4bef-843e-9486d196cb3b" />
+</div>
+
+
+### `terraform destroy`
+<div align="center">
+<img src="https://github.com/user-attachments/assets/01e6cecc-3f3e-4e89-af67-5000af6b66a7" />
 </div>
